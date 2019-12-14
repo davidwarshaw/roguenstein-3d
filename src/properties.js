@@ -1,5 +1,5 @@
 export default {
-  debug: true,
+  debug: false,
   screen: {
     width: 320,
     height: 200
@@ -11,7 +11,7 @@ export default {
   },
   frustum: {
     fov: 60,
-    near: 0.50,
+    near: 0.5,
     far: 800
   },
   visualRange: 500,
@@ -23,7 +23,11 @@ export default {
     right: Phaser.Input.Keyboard.KeyCodes.D,
     strafeLeft: Phaser.Input.Keyboard.KeyCodes.COMMA,
     strafeRight: Phaser.Input.Keyboard.KeyCodes.PERIOD,
-    fire1: Phaser.Input.Keyboard.KeyCodes.K,
-    fire2: Phaser.Input.Keyboard.KeyCodes.L
+    leftAction: Phaser.Input.Keyboard.KeyCodes.K,
+    rightAction: Phaser.Input.Keyboard.KeyCodes.L,
+    leftScrollLeft: Phaser.Input.Keyboard.KeyCodes.U,
+    leftScrollRight: Phaser.Input.Keyboard.KeyCodes.I,
+    rightScrollLeft: Phaser.Input.Keyboard.KeyCodes.O,
+    rightScrollRight: Phaser.Input.Keyboard.KeyCodes.P
   }
 };

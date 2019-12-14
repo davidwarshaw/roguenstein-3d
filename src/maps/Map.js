@@ -1,4 +1,4 @@
-import properties from './properties';
+import properties from '../properties';
 
 export default class Map {
   constructor(player) {

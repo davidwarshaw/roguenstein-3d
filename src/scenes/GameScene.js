@@ -3,8 +3,9 @@ import properties from '../properties';
 import Font from '../Font';
 import ThreeRenderer from '../ThreeRenderer';
 import Camera from '../Camera';
+import Hud from '../ui/Hud';
 
-import Map from '../Map';
+import Map from '../maps/Map';
 
 import Player from '../ecs/entities/Player';
 
@@ -23,6 +24,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     this.font = new Font(this);
+
     this.player = new Player(this);
     this.map = new Map(this.player);
     this.camera = new Camera(this.player);
@@ -30,6 +32,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.collisionSystem = new CollisionSystem();
 
+    // Top UI
+    this.hud = new Hud(this, this.font);
     this.debugText = new DebugText(this, this.camera, this.player);
   }
 

@@ -1,8 +1,10 @@
 import properties from '../../properties';
 
+import Inventory from './Inventory';
+
 export default class Player {
   constructor(scene) {
-    this.height = properties.tile.heightY / 2;
+    this.height = properties.tile.heightY / 3;
     this.radius = 2;
 
     this.walkSpeed = 0.03;
@@ -13,6 +15,11 @@ export default class Player {
     this.orientation = 0;
 
     this.collider = new Phaser.Geom.Circle(this.position.x, this.position.y, this.radius);
+
+    this.health = 100;
+    this.armor = 0;
+    this.gold = 0;
+    this.inventory = new Inventory();
 
     scene.input.keyboard.addCapture(properties.playerKeys);
     this.keys = scene.input.keyboard.addKeys(properties.playerKeys);
@@ -54,6 +61,20 @@ export default class Player {
         -strafeMovement
       );
       this.velocity.add(component);
+    }
+
+    if (this.keys.leftScrollLeft.isDown) {
+      this.inventory.leftScrollLeft();
+    }
+    else if (this.keys.leftScrollRight.isDown) {
+      this.inventory.leftScrollRight();
+    }
+
+    if (this.keys.rightScrollLeft.isDown) {
+      this.inventory.rightScrollLeft();
+    }
+    else if (this.keys.rightScrollRight.isDown) {
+      this.inventory.rightScrollRight();
     }
   }
 }
