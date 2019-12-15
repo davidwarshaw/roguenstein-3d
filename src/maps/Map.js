@@ -1,15 +1,11 @@
 import properties from '../properties';
 
+import prefabs from './prefabs';
+
 export default class Map {
-  constructor(player) {
-    this.prefab = [
-      ['#', '#', '#', '#', '#'],
-      ['#', '.', '.', '.', '.'],
-      ['#', '.', '.', '.', '#'],
-      ['#', '.', '.', '.', '#'],
-      ['#', '#', '#', '#', '#']
-    ];
-    this.colliders = this.prefab
+  constructor(player, worldName) {
+    this.world = prefabs[worldName];
+    this.colliders = this.world
       .map((tileRow, j) =>
         tileRow.map((tile, i) => {
           if (tile === '#') {
@@ -28,18 +24,18 @@ export default class Map {
   }
 
   getTileWidthX() {
-    return this.prefab[0].length;
+    return this.world[0].length;
   }
 
   getTileWidthZ() {
-    return this.prefab.length;
+    return this.world.length;
   }
 
   getTileByXZ(x, z) {
-    return this.prefab[z][x];
+    return this.world[z][x];
   }
 
   getTiles() {
-    return this.prefab;
+    return this.world;
   }
 }

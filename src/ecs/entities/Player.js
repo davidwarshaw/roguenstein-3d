@@ -4,6 +4,7 @@ import Inventory from './Inventory';
 
 export default class Player {
   constructor(scene) {
+    // Transform
     this.height = properties.tile.heightY / 3;
     this.radius = 2;
 
@@ -16,13 +17,43 @@ export default class Player {
 
     this.collider = new Phaser.Geom.Circle(this.position.x, this.position.y, this.radius);
 
+    // Stats
     this.health = 100;
     this.armor = 0;
     this.gold = 0;
     this.inventory = new Inventory();
 
+    // Input
     scene.input.keyboard.addCapture(properties.playerKeys);
     this.keys = scene.input.keyboard.addKeys(properties.playerKeys);
+
+    this.keys.leftScrollLeft.on('down', (key, event) => {
+      this.inventory.leftScrollLeft();
+    });
+    this.keys.leftScrollRight.on('down', (key, event) => {
+      this.inventory.leftScrollRight();
+    });
+    this.keys.rightScrollLeft.on('down', (key, event) => {
+      this.inventory.rightScrollLeft();
+    });
+    this.keys.rightScrollRight.on('down', (key, event) => {
+      this.inventory.rightScrollRight();
+    });
+
+    this.keys.leftAction.on('down', (key, event) => {
+      //
+    });
+    this.keys.rightAction.on('down', (key, event) => {
+      //
+    });
+  }
+
+  getValue(value) {
+    return this[value];
+  }
+
+  setPosition(newPosition) {
+    this.position.setFromObject(newPosition);
   }
 
   update(delta) {
@@ -61,20 +92,6 @@ export default class Player {
         -strafeMovement
       );
       this.velocity.add(component);
-    }
-
-    if (this.keys.leftScrollLeft.isDown) {
-      this.inventory.leftScrollLeft();
-    }
-    else if (this.keys.leftScrollRight.isDown) {
-      this.inventory.leftScrollRight();
-    }
-
-    if (this.keys.rightScrollLeft.isDown) {
-      this.inventory.rightScrollLeft();
-    }
-    else if (this.keys.rightScrollRight.isDown) {
-      this.inventory.rightScrollRight();
     }
   }
 }

@@ -114,8 +114,8 @@ export default class Font {
       chars: chars.flat().join(''),
       charsPerRow: chars[0].length,
       spacing: {
-        x: 1,
-        y: 1
+        x: 0,
+        y: 0
       }
     };
 

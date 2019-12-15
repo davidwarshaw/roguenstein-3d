@@ -9,20 +9,14 @@ export default class Inventory {
     };
   }
 
-  render() {}
-
-  getSide(side) {
-    return this.indexes[side] !== null ? this.bag[this.indexes[side]] : null;
-  }
-  getLeft() {
-    return this.getSide('left');
-  }
-  getRight() {
-    return this.getSide('right');
+  getBySideOffset(side, offset) {
+    const index = this.indexes[side];
+    const offsetIndex = Phaser.Math.Wrap(index + offset, 0, this.bag.length - 1);
+    return this.indexes[side] !== null ? this.bag[offsetIndex] : null;
   }
 
   scrollIndex(side, direction) {
-    const otherIndex = this.indexes[otherSide(side)];
+    const otherIndex = this.indexes[this.otherSide(side)];
 
     // Only scroll if there's at least one thing in the bag
     if (this.bag.length > 0) {

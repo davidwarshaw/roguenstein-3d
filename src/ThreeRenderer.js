@@ -26,6 +26,11 @@ export default class ThreeRenderer {
             this.threeScene.add(mesh);
             break;
           }
+          case '0': {
+            const mesh = this.modelFactory.createPortal(i, j);
+            this.threeScene.add(mesh);
+            break;
+          }
           case '+': {
             // Door is northSouth if there is a wall to the north
             const northSouth = map.getTileByXZ(j - 1, i) === '#';
@@ -35,7 +40,8 @@ export default class ThreeRenderer {
           }
           default:
         }
-      }));
+      })
+    );
 
     // Add some light
     this.light = new THREE.AmbientLight(0xffffff);
@@ -47,6 +53,7 @@ export default class ThreeRenderer {
       context: phaserScene.game.context,
       antialias: false
     });
+
     // This is necessary (why?)
     this.renderer.autoClear = false;
 
@@ -54,6 +61,6 @@ export default class ThreeRenderer {
     this.extern.render = (prenderer, pcamera, pcalcMatrix) => {
       this.renderer.state.reset();
       this.renderer.render(this.threeScene, this.threeCamera);
-    }
+    };
   }
 }

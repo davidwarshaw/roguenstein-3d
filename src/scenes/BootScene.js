@@ -11,7 +11,7 @@ export default class BootScene extends Phaser.Scene {
       frameWidth: 8,
       frameHeight: 16,
       margin: 0,
-      spacing: 1
+      spacing: 0
     });
   }
 

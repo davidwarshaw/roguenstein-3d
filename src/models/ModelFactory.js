@@ -10,6 +10,18 @@ export default class ModelFactory {
     this.textures['wall'].minFilter = THREE.NearestFilter;
     this.textures['wall'].magFilter = THREE.NearestFilter;
 
+    this.textures['sealedPortal'] = new THREE.TextureLoader().load(
+      '../assets/images/sealed_portal.png'
+    );
+    this.textures['sealedPortal'].minFilter = THREE.NearestFilter;
+    this.textures['sealedPortal'].magFilter = THREE.NearestFilter;
+
+    this.textures['openPortal'] = new THREE.TextureLoader().load(
+      '../assets/images/open_portal.png'
+    );
+    this.textures['openPortal'].minFilter = THREE.NearestFilter;
+    this.textures['openPortal'].magFilter = THREE.NearestFilter;
+
     this.textures['floor'] = new THREE.TextureLoader().load('../assets/images/floor_grey.png');
     this.textures['floor'].minFilter = THREE.NearestFilter;
     this.textures['floor'].magFilter = THREE.NearestFilter;
@@ -21,9 +33,21 @@ export default class ModelFactory {
 
     this.meshResources['wall'] = {};
     this.meshResources['wall']['geometry'] = new THREE.BoxBufferGeometry(
-      properties.tile.widthX, properties.tile.heightY, properties.tile.widthZ);
+      properties.tile.widthX,
+      properties.tile.heightY,
+      properties.tile.widthZ
+    );
     this.meshResources['wall']['material'] = new THREE.MeshBasicMaterial({
       map: this.textures['wall']
+    });
+    this.meshResources['portal'] = {};
+    this.meshResources['portal']['geometry'] = new THREE.BoxBufferGeometry(
+      properties.tile.widthX,
+      properties.tile.heightY,
+      properties.tile.widthZ
+    );
+    this.meshResources['portal']['material'] = new THREE.MeshBasicMaterial({
+      map: this.textures['openPortal']
     });
   }
 
@@ -36,13 +60,14 @@ export default class ModelFactory {
     const geometry = new THREE.PlaneBufferGeometry(widthX, widthZ);
     const material = new THREE.MeshBasicMaterial({
       map: texture,
-      side: THREE.DoubleSide,
+      side: THREE.DoubleSide
     });
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.x = widthX / 2;
     mesh.position.y = 0;
     mesh.position.z = widthZ / 2;
+
     // Planes are vertical by default
     mesh.rotation.x = Math.PI / 2;
 
@@ -51,30 +76,36 @@ export default class ModelFactory {
 
   createWall(tileX, tileY) {
     const tileZ = -tileY;
-    const {
-      geometry,
-      material
-    } = this.meshResources['wall'];
+    const { geometry, material } = this.meshResources['wall'];
     const mesh = new THREE.Mesh(geometry, material);
 
-    mesh.position.x = (tileX * properties.tile.widthX) + (properties.tile.widthX / 2);
+    mesh.position.x = tileX * properties.tile.widthX + properties.tile.widthX / 2;
     mesh.position.y = properties.tile.heightY / 2;
-    mesh.position.z = (tileZ * properties.tile.widthZ) - (properties.tile.widthZ / 2);
+    mesh.position.z = tileZ * properties.tile.widthZ - properties.tile.widthZ / 2;
+
+    return mesh;
+  }
+
+  createPortal(tileX, tileY) {
+    const tileZ = -tileY;
+    const { geometry, material } = this.meshResources['portal'];
+    const mesh = new THREE.Mesh(geometry, material);
+
+    mesh.position.x = tileX * properties.tile.widthX + properties.tile.widthX / 2;
+    mesh.position.y = properties.tile.heightY / 2;
+    mesh.position.z = tileZ * properties.tile.widthZ - properties.tile.widthZ / 2;
 
     return mesh;
   }
 
   createDoor(tileX, tileY, northSouth) {
     const tileZ = -tileY;
-    const {
-      geometry,
-      material
-    } = this.meshResources['wall'];
+    const { geometry, material } = this.meshResources['wall'];
     const mesh = new THREE.Mesh(geometry, material);
 
-    mesh.position.x = (tileX * properties.tile.widthX) + (properties.tile.widthX / 2);
+    mesh.position.x = tileX * properties.tile.widthX + properties.tile.widthX / 2;
     mesh.position.y = properties.tile.heightY / 2;
-    mesh.position.z = (tileZ * properties.tile.widthZ) - (properties.tile.widthZ / 2);
+    mesh.position.z = tileZ * properties.tile.widthZ - properties.tile.widthZ / 2;
 
     return mesh;
   }
