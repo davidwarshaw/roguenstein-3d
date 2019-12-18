@@ -1,3 +1,8 @@
+import * as ROT from 'rot-js';
+
+ROT.RNG.setSeed(100);
+ROT.Display.Rect.cache = true;
+
 export default {
   debug: false,
   screen: {
@@ -16,6 +21,7 @@ export default {
   },
   visualRange: 500,
   scaleRatio: 3,
+  rng: ROT.RNG,
   playerKeys: {
     up: Phaser.Input.Keyboard.KeyCodes.W,
     down: Phaser.Input.Keyboard.KeyCodes.S,

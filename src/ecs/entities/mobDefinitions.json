@@ -1,0 +1,24 @@
+{
+  "rat": {
+    "name": "rat",
+    "glyph": "r",
+    "color": "0x6600ff",
+    "height": 4,
+    "scale": 0.5,
+    "speed": 0.01,
+    "health": 5,
+    "damage": 1,
+    "attackFrequency": 1
+  },
+  "bat": {
+    "name": "bat",
+    "glyph": "b",
+    "color": "0x330066",
+    "height": 10,
+    "scale": 0.5,
+    "speed": 0.01,
+    "health": 5,
+    "damage": 1,
+    "attackFrequency": 1
+  }
+}

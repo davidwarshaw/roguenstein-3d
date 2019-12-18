@@ -1,7 +1,10 @@
 import properties from '../properties';
 
 export default class Hud {
-  constructor(scene, font) {
+  constructor(scene, font, player) {
+    this.font = font;
+    this.player = player;
+
     const height = 32;
     const margin = 8;
     const rowBase = properties.screen.height - height;
@@ -9,8 +12,32 @@ export default class Hud {
     const colOffset = 62;
     const rowOffset = 16;
 
+    this.itemViewY = 150;
+    const itemViewXFromCenter = 90;
+    const itemViewXLeft = properties.screen.width / 2 - itemViewXFromCenter;
+    const itemViewXRight = properties.screen.width / 2 + itemViewXFromCenter;
+    this.itemActivateYTravel = 50;
+
+    this.itemViews = {
+      left: scene.add.image(
+        itemViewXLeft,
+        this.itemViewY,
+        'asciiSpriteSheet',
+        font.getFrameForCharacter(']')
+      ),
+      right: scene.add.image(
+        itemViewXRight,
+        this.itemViewY,
+        'asciiSpriteSheet',
+        font.getFrameForCharacter('(')
+      )
+    };
+    ['left', 'right'].forEach(side => {
+      this.itemViews[side].scale = 10;
+    });
+
     this.graphics = scene.add.graphics();
-    this.graphics.fillStyle(0x0000ff);
+    this.graphics.fillStyle(0x000000);
     this.graphics.fillRect(0, properties.screen.height - height, properties.screen.width, height);
 
     const displayConfigs = [
@@ -73,7 +100,17 @@ export default class Hud {
     return value.toString().padStart(4, '-');
   }
 
-  update(font, player) {
+  rerender() {
+    // Item views
+    ['left', 'right'].forEach(side => {
+      if (this.player.item[side].active) {
+        this.itemViews[side].y = this.itemViewY - this.itemActivateYTravel;
+      }
+      else {
+        this.itemViews[side].y = this.itemViewY;
+      }
+    });
+
     // Numeric displays
     this.displays.forEach((displayRows, row) =>
       displayRows.forEach((display, col) => {
@@ -81,7 +118,7 @@ export default class Hud {
         if (!text) {
           return;
         }
-        text.setText(this.formatValue(player.getValue(config.field)));
+        text.setText(this.formatValue(this.player.getValue(config.field)));
       })
     );
 
@@ -90,7 +127,7 @@ export default class Hud {
       hudSelect.forEach((displaySelect, displayCol) => {
         const { side, offset, text } = displaySelect;
         const isItem = typeof offset === 'number';
-        const glyph = isItem ? player.inventory.getBySideOffset(side, offset) : offset;
+        const glyph = isItem ? this.player.inventory.getBySideOffset(side, offset) : offset;
         const tint = isItem ? 0xff0000 : 0xffffff;
         text.setText(glyph);
         text.tint = tint;

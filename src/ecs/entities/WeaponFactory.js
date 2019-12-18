@@ -1,12 +1,14 @@
 import weaponDefinitions from './weaponDefinitions';
 
 class Weapon {
-  constructor(definition) {}
+  constructor(definition) {
+    this.definition = JSON.parse(JSON.stringify(definition));
+  }
   use() {}
 }
 
 export default class WeaponFactory {
-  static createWeapon(type) {
+  static CreateWeapon(type) {
     const definition = weaponDefinitions[type];
     return new Weapon(definition);
   }

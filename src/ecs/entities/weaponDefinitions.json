@@ -1,0 +1,20 @@
+{
+  "sword": {
+    "name": "sword",
+    "glyph": "(",
+    "use": "melee",
+    "useTween": [0, 0, 10, 10]
+  },
+  "shield": {
+    "name": "shield",
+    "glyph": "[",
+    "use": "defense",
+    "useTween": [0, 0, 10, 10]
+  },
+  "wand": {
+    "name": "wand",
+    "glyph": "!",
+    "use": "projectile",
+    "useTween": [0, 0, 10, 10]
+  }
+}

@@ -4,6 +4,7 @@ import prefabs from './prefabs';
 
 export default class Map {
   constructor(player, worldName) {
+    this.worldName = worldName;
     this.world = prefabs[worldName];
     this.colliders = this.world
       .map((tileRow, j) =>

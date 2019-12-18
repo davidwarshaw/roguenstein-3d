@@ -53,6 +53,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "phaser": "3.21.0",
     "phaser-animated-tiles": "^2.0.2",
+    "rot-js": "^2.1.1",
     "three": "^0.100.0"
   }
 }

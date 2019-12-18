@@ -9,6 +9,14 @@ export default class Inventory {
     };
   }
 
+  getLeft() {
+    return this.bag[this.indexes.left];
+  }
+
+  getRight() {
+    return this.bag[this.indexes.right];
+  }
+
   getBySideOffset(side, offset) {
     const index = this.indexes[side];
     const offsetIndex = Phaser.Math.Wrap(index + offset, 0, this.bag.length - 1);
@@ -33,7 +41,7 @@ export default class Inventory {
     this.scrollIndex('right', -1);
   }
   rightScrollRight() {
-    this.scrollIndex('right', -1);
+    this.scrollIndex('right', 1);
   }
 
   otherSide(side) {

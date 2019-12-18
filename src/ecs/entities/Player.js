@@ -23,33 +23,50 @@ export default class Player {
     this.gold = 0;
     this.inventory = new Inventory();
 
+    // Items
+    this.item = {
+      left: {
+        active: false
+      },
+      right: {
+        active: false
+      }
+    };
+
     // Input
     scene.input.keyboard.addCapture(properties.playerKeys);
     this.keys = scene.input.keyboard.addKeys(properties.playerKeys);
 
     this.keys.leftScrollLeft.on('down', (key, event) => {
       this.inventory.leftScrollLeft();
+      this.hud.rerender();
     });
     this.keys.leftScrollRight.on('down', (key, event) => {
       this.inventory.leftScrollRight();
+      this.hud.rerender();
     });
     this.keys.rightScrollLeft.on('down', (key, event) => {
       this.inventory.rightScrollLeft();
+      this.hud.rerender();
     });
     this.keys.rightScrollRight.on('down', (key, event) => {
       this.inventory.rightScrollRight();
+      this.hud.rerender();
     });
+  }
 
-    this.keys.leftAction.on('down', (key, event) => {
-      //
-    });
-    this.keys.rightAction.on('down', (key, event) => {
-      //
-    });
+  registerHud(hud) {
+    this.hud = hud;
+    this.hud.rerender();
   }
 
   getValue(value) {
     return this[value];
+  }
+
+  setValue(value, quantity) {
+    this[value] = quantity;
+    this.hud.rerender();
   }
 
   setPosition(newPosition) {
@@ -92,6 +109,25 @@ export default class Player {
         -strafeMovement
       );
       this.velocity.add(component);
+    }
+
+    if (this.keys.leftAction.isDown) {
+      this.inventory.getLeft();
+      this.item['left'].active = true;
+      this.hud.rerender();
+    }
+    else {
+      this.item['left'].active = false;
+      this.hud.rerender();
+    }
+    if (this.keys.rightAction.isDown) {
+      this.inventory.getRight();
+      this.item['right'].active = true;
+      this.hud.rerender();
+    }
+    else {
+      this.item['right'].active = false;
+      this.hud.rerender();
     }
   }
 }

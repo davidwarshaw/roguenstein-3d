@@ -8,6 +8,7 @@ import Hud from '../ui/Hud';
 import Map from '../maps/Map';
 
 import Player from '../ecs/entities/Player';
+import MobFactory from '../ecs/entities/MobFactory';
 
 import CollisionSystem from '../ecs/systems/CollisionSystem';
 
@@ -23,20 +24,27 @@ export default class GameScene extends Phaser.Scene {
   preload() {}
 
   create() {
+    const worldName = 'hub';
+
     this.font = new Font(this);
 
     this.player = new Player(this);
     this.player.setPosition({ x: 50, y: 50 });
 
-    this.map = new Map(this.player, 'hub');
+    this.map = new Map(this.player, worldName);
     this.camera = new Camera(this.player);
     this.threeStuff = new ThreeRenderer(this, this.camera.camera, this.map);
+
+    this.mobs = MobFactory.CreateMobs(this.threeStuff, this.map);
 
     this.collisionSystem = new CollisionSystem();
 
     // Top UI
     this.hud = new Hud(this, this.font, this.player);
     this.debugText = new DebugText(this, this.camera, this.player);
+
+    // Register Hud with player to receive events
+    this.player.registerHud(this.hud);
   }
 
   update(time, delta) {
@@ -45,8 +53,6 @@ export default class GameScene extends Phaser.Scene {
     this.collisionSystem.update(this.map, this.player);
 
     this.camera.update(this.player);
-
-    this.hud.update(this.font, this.player);
 
     if (properties.debug) {
       this.debugText.update();
