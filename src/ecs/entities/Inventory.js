@@ -9,12 +9,14 @@ export default class Inventory {
     };
   }
 
-  getLeft() {
-    return this.bag[this.indexes.left];
+  getSide(side) {
+    return this.bag[this.indexes[side]];
   }
-
+  getLeft() {
+    return this.getSide('left');
+  }
   getRight() {
-    return this.bag[this.indexes.right];
+    return this.getSide('right');
   }
 
   getBySideOffset(side, offset) {

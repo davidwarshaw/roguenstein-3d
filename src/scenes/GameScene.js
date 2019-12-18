@@ -11,6 +11,8 @@ import Player from '../ecs/entities/Player';
 import MobFactory from '../ecs/entities/MobFactory';
 
 import CollisionSystem from '../ecs/systems/CollisionSystem';
+import AiSystem from '../ecs/systems/AiSystem';
+import CombatSystem from '../ecs/systems/CombatSystem';
 
 import DebugText from '../DebugText';
 
@@ -38,6 +40,8 @@ export default class GameScene extends Phaser.Scene {
     this.mobs = MobFactory.CreateMobs(this.threeStuff, this.map);
 
     this.collisionSystem = new CollisionSystem();
+    this.aiSystem = new AiSystem();
+    this.combatSystem = new CombatSystem();
 
     // Top UI
     this.hud = new Hud(this, this.font, this.player);
@@ -50,9 +54,13 @@ export default class GameScene extends Phaser.Scene {
   update(time, delta) {
     this.player.update(delta);
 
-    this.collisionSystem.update(this.map, this.player);
+    this.aiSystem.update(delta, this.player, this.mobs);
+
+    this.collisionSystem.update(this.map, this.player, this.mobs);
 
     this.camera.update(this.player);
+
+    this.combatSystem.update(this.player, this.mobs);
 
     if (properties.debug) {
       this.debugText.update();

@@ -23,6 +23,9 @@ export default class Player {
     this.gold = 0;
     this.inventory = new Inventory();
 
+    // Status
+    this.meleeAttacking = false;
+
     // Items
     this.item = {
       left: {
@@ -128,6 +131,17 @@ export default class Player {
     else {
       this.item['right'].active = false;
       this.hud.rerender();
+    }
+  }
+
+  useItem(side) {
+    const item = this.inventory.getSide(side);
+    switch (item.use) {
+      case 'melee': {
+        this.meleeAttacking = true;
+        break;
+      }
+      default:
     }
   }
 }

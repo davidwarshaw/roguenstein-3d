@@ -7,7 +7,7 @@
   },
   "shield": {
     "name": "shield",
-    "glyph": "[",
+    "glyph": "]",
     "use": "defense",
     "useTween": [0, 0, 10, 10]
   },
