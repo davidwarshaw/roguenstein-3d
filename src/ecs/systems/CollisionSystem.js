@@ -1,7 +1,5 @@
 export default class CollisionSystem {
-  constructor() {}
-
-  handlePlayer(inflatedColliders, player) {
+  static HandlePlayer(inflatedColliders, player) {
     const { position, velocity, collider } = player;
 
     const nextPosition = new Phaser.Math.Vector2(position.x, position.y).add(velocity);
@@ -24,13 +22,15 @@ export default class CollisionSystem {
     collider.setPosition(position.x, position.y);
   }
 
-  update(map, player, mobs) {
+  static Run(map, player, mobs) {
     const { inflatedColliders } = map;
 
-    this.handlePlayer(inflatedColliders, player);
+    // Handle the player
+    CollisionSystem.HandlePlayer(inflatedColliders, player);
 
+    // Handle all the mobs
     mobs.forEach(mob => {
-      const { position, velocity, collider } = mob;
+      const { position, velocity, collider, attackCollider } = mob;
 
       const nextPosition = new Phaser.Math.Vector2(position.x, position.y).add(velocity);
 
@@ -53,12 +53,12 @@ export default class CollisionSystem {
       );
 
       if (wallCollision || mobCollision || playerCollision) {
-        console.log('Collision!');
         nextPosition.setFromObject(position);
       }
 
       position.setFromObject(nextPosition);
       collider.setPosition(position.x, position.y);
+      attackCollider.setPosition(position.x, position.y);
 
       mob.rerender();
     });

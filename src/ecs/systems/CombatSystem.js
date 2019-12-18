@@ -1,7 +1,15 @@
 export default class AiSystem {
-  constructor() {}
+  static Run(delta, scene, player, mobs) {
+    mobs
+      .filter(mob => mob.attackStatus === 'will_attack')
+      .forEach(mob => {
+        const health = player.health - mob.definition.damage;
+        player.setValue('health', health);
+        mob.enterAttack();
+      });
 
-  update(player, mobs) {
-    //mobs.forEach(mob => mob.combat(player));
+    if (player.health <= 0) {
+      scene.gameOver();
+    }
   }
 }

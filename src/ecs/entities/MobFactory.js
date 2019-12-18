@@ -6,22 +6,38 @@ import worldMobDefinitions from './worldMobDefinitions';
 import mobDefinitions from './mobDefinitions';
 
 class Mob {
-  constructor(threeRenderer, definition, tile) {
+  constructor(scene, threeRenderer, definition, tile) {
+    this.scene = scene;
+
     // Mob stats
     this.definition = JSON.parse(JSON.stringify(definition));
 
     this.targettingPlayer = false;
+    this.attackStatus = 'not_attacking';
     this.health = this.definition.health;
     this.alive = true;
+
+    // Animation timers
+    this.attackAnimationTimer = null;
+    this.attackCooldownTimer = null;
+
+    // Transform
     this.position = new Phaser.Math.Vector2(
       tile.i * properties.tile.widthX + properties.tile.widthX / 2,
       tile.j * properties.tile.widthZ - properties.tile.widthZ / 2
     );
     this.orientation = 0;
+
     this.collider = new Phaser.Geom.Circle(
       this.position.x,
       this.position.y,
       this.definition.radius
+    );
+
+    this.attackCollider = new Phaser.Geom.Circle(
+      this.position.x,
+      this.position.y,
+      this.definition.radius + this.definition.attackReach
     );
 
     // Model
@@ -47,42 +63,52 @@ class Mob {
     }
   }
 
+  enterAttack() {
+    // Attack flash color
+    const color = 0xffffff;
+    this.sprite.material.setValues({ color });
+
+    this.attackAnimationTimer = this.scene.time.delayedCall(
+      this.definition.attackAnimationTime,
+      this.enterCooldown,
+      [],
+      this
+    );
+
+    this.attackStatus = 'has_attacked';
+  }
+
+  enterCooldown() {
+    // Revert to normal color
+    const color = Number(this.definition.color);
+    this.sprite.material.setValues({ color });
+
+    this.attackCooldownTimer = this.scene.time.delayedCall(
+      this.definition.attackCooldownTime,
+      this.enterIdle,
+      [],
+      this
+    );
+  }
+
+  enterIdle() {
+    this.attackStatus = 'not_attacking';
+  }
+
   rerender() {
     this.sprite.position.x = this.position.x;
     this.sprite.position.y = this.definition.height;
     this.sprite.position.z = -this.position.y;
   }
-
-  ai(delta, player) {
-    const { position } = this;
-    this.velocity = new Phaser.Math.Vector2(0, 0);
-    const targetLine = new Phaser.Geom.Line(
-      position.x,
-      position.y,
-      player.position.x,
-      player.position.y
-    );
-
-    const distanceToPlayer = Phaser.Geom.Line.Length(targetLine);
-    this.targettingPlayer = distanceToPlayer <= this.definition.vision;
-
-    if (this.targettingPlayer) {
-      this.orientation = Phaser.Geom.Line.Angle(targetLine);
-
-      const movement = this.definition.speed * delta;
-      this.velocity.setToPolar(this.orientation, movement);
-    } else {
-    }
-  }
 }
 
 export default class MobFactory {
-  static CreateMob(threeRenderer, name, tile) {
+  static CreateMob(scene, threeRenderer, name, tile) {
     const definition = mobDefinitions[name];
-    return new Mob(threeRenderer, definition, tile);
+    return new Mob(scene, threeRenderer, definition, tile);
   }
 
-  static CreateMobs(threeRenderer, map) {
+  static CreateMobs(scene, threeRenderer, map) {
     const mobDef = worldMobDefinitions[map.worldName];
 
     const mobInstances = [];
@@ -97,7 +123,7 @@ export default class MobFactory {
       .sort((l, r) => l.randomOrder - r.randomOrder);
 
     const mobs = flatMobInstances.map((mobName, i) =>
-      MobFactory.CreateMob(threeRenderer, mobName, candidateTiles[i])
+      MobFactory.CreateMob(scene, threeRenderer, mobName, candidateTiles[i])
     );
 
     return mobs;

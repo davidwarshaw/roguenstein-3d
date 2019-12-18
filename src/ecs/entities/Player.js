@@ -18,7 +18,8 @@ export default class Player {
     this.collider = new Phaser.Geom.Circle(this.position.x, this.position.y, this.radius);
 
     // Stats
-    this.health = 100;
+    this.maxHealth = 100;
+    this.health = this.maxHealth;
     this.armor = 0;
     this.gold = 0;
     this.inventory = new Inventory();

@@ -9,8 +9,10 @@
     "vision": 40,
     "speed": 0.005,
     "health": 5,
+    "attackReach": 1,
     "damage": 1,
-    "attackFrequency": 1
+    "attackAnimationTime": 100,
+    "attackCooldownTime": 1000
   },
   "bat": {
     "name": "bat",
@@ -22,7 +24,9 @@
     "vision": 20,
     "speed": 0.01,
     "health": 5,
+    "attackReach": 1,
     "damage": 1,
-    "attackFrequency": 1
+    "attackAnimationTime": 100,
+    "attackCooldownTime": 500
   }
 }

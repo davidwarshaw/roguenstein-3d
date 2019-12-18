@@ -37,11 +37,7 @@ export default class GameScene extends Phaser.Scene {
     this.camera = new Camera(this.player);
     this.threeStuff = new ThreeRenderer(this, this.camera.camera, this.map);
 
-    this.mobs = MobFactory.CreateMobs(this.threeStuff, this.map);
-
-    this.collisionSystem = new CollisionSystem();
-    this.aiSystem = new AiSystem();
-    this.combatSystem = new CombatSystem();
+    this.mobs = MobFactory.CreateMobs(this, this.threeStuff, this.map);
 
     // Top UI
     this.hud = new Hud(this, this.font, this.player);
@@ -54,16 +50,18 @@ export default class GameScene extends Phaser.Scene {
   update(time, delta) {
     this.player.update(delta);
 
-    this.aiSystem.update(delta, this.player, this.mobs);
-
-    this.collisionSystem.update(this.map, this.player, this.mobs);
+    AiSystem.Run(delta, this, this.player, this.mobs);
+    CollisionSystem.Run(this.map, this.player, this.mobs);
+    CombatSystem.Run(delta, this, this.player, this.mobs);
 
     this.camera.update(this.player);
-
-    this.combatSystem.update(this.player, this.mobs);
 
     if (properties.debug) {
       this.debugText.update();
     }
+  }
+
+  gameOver() {
+    this.scene.start('GameOverScene');
   }
 }
