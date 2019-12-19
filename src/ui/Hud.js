@@ -23,13 +23,13 @@ export default class Hud {
         itemViewXLeft,
         this.itemViewY,
         'asciiSpriteSheet',
-        font.getFrameForCharacter(']')
+        font.getFrameForCharacter('1')
       ),
       right: scene.add.image(
         itemViewXRight,
         this.itemViewY,
         'asciiSpriteSheet',
-        font.getFrameForCharacter('(')
+        font.getFrameForCharacter('2')
       )
     };
     ['left', 'right'].forEach(side => {
@@ -93,16 +93,46 @@ export default class Hud {
         return { side, offset, text };
       })
     );
+
+    // Item names
+    this.itemNameTimer = null;
+    this.itemNames = ['left', 'right'].map((side, i) => {
+      const text = font.render(
+        margin + (i * properties.screen.width) / 2,
+        rowBase - displayColOffset - 2 * margin,
+        ''
+      );
+      return { side, text };
+    });
+  }
+
+  showItemName(scene, side) {
+    const sideNumber = side === 'left' ? 0 : 1;
+    this.itemNames[sideNumber].text.setText(this.player.inventory.getSide(side).definition.name);
+    this.itemNameTimer = scene.time.delayedCall(
+      properties.itemNameTime,
+      () => this.itemNames[sideNumber].text.setText(''),
+      [],
+      this
+    );
   }
 
   formatValue(numeric) {
-    const value = numeric > 0 ? numeric : '-';
+    const value = numeric > 0 ? Math.round(numeric) : '-';
     return value.toString().padStart(4, '-');
   }
 
   rerender() {
     // Item views
     ['left', 'right'].forEach(side => {
+      const item = this.player.inventory.getSide(side);
+      const glyph = item ? item.definition.glyph : ' ';
+      const color = item ? item.definition.color : 0x000000;
+
+      const frame = this.font.getFrameForCharacter(glyph);
+      this.itemViews[side].setTexture('asciiSpriteSheet', frame);
+      this.itemViews[side].tint = color;
+
       if (this.player.item[side].active) {
         this.itemViews[side].y = this.itemViewY - this.itemActivateYTravel;
       }
@@ -126,12 +156,23 @@ export default class Hud {
     this.itemSelects.forEach((hudSelect, hudCol) =>
       hudSelect.forEach((displaySelect, displayCol) => {
         const { side, offset, text } = displaySelect;
-        const isItem = typeof offset === 'number';
-        const glyph = isItem ? this.player.inventory.getBySideOffset(side, offset) : offset;
-        const tint = isItem ? 0xff0000 : 0xffffff;
+        let glyph = offset;
+        let color = 0xffffff;
+
+        if (typeof offset === 'number') {
+          const item = this.player.inventory.getBySideOffset(side, offset);
+          glyph = item !== null ? item.definition.glyph : ' ';
+          color = item !== null ? item.definition.color : 0x000000;
+        }
+
         text.setText(glyph);
-        text.tint = tint;
+        text.tint = color;
       })
     );
+
+    // Item names
+    // this.itemNames.forEach(itemName =>
+    //   itemName.text.setText(this.player.inventory.getSide(itemName.side).definition.name)
+    // );
   }
 }

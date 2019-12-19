@@ -1,5 +1,5 @@
 export default class AiSystem {
-  static Run(delta, scene, player, mobs) {
+  static Run(delta, scene, map, player, mobs, projectiles) {
     // Move
     mobs.forEach(mob => {
       const { position } = mob;

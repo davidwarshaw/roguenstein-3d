@@ -22,6 +22,8 @@ export default {
   visualRange: 500,
   scaleRatio: 3,
   rng: ROT.RNG,
+  hitAnimationTime: 100,
+  itemNameTime: 500,
   playerKeys: {
     up: Phaser.Input.Keyboard.KeyCodes.W,
     down: Phaser.Input.Keyboard.KeyCodes.S,

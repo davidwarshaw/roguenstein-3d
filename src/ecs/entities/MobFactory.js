@@ -56,16 +56,26 @@ class Mob {
     threeRenderer.threeScene.add(this.sprite);
   }
 
-  hit(amount) {
-    this.health = Phaser.Math.Clamp(this.health - amount, 0, this.definition.health);
-    if (this.health === 0) {
-      this.alive = false;
-    }
+  enterHit() {
+    // Hit flash color
+    const color = 0xffffff;
+    this.sprite.material.setValues({ color });
+
+    this.attackAnimationTimer = this.scene.time.delayedCall(
+      properties.hitAnimationTime,
+      () => {
+        // Revert to normal color
+        const color = Number(this.definition.color);
+        this.sprite.material.setValues({ color });
+      },
+      [],
+      this
+    );
   }
 
   enterAttack() {
     // Attack flash color
-    const color = 0xffffff;
+    const color = 0xff0000;
     this.sprite.material.setValues({ color });
 
     this.attackAnimationTimer = this.scene.time.delayedCall(

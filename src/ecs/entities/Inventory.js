@@ -1,12 +1,16 @@
 import properties from '../../properties';
 
+import ItemFactory from './ItemFactory';
+
 export default class Inventory {
-  constructor() {
-    this.bag = ['[', '(', '!', '@', '$', '%'];
+  constructor(playStateInventory) {
+    this.bag = ItemFactory.CreateItems(playStateInventory.bag);
     this.indexes = {
-      left: 0,
-      right: 1
+      left: playStateInventory.indexes.left,
+      right: playStateInventory.indexes.right
     };
+    console.log(this.bag);
+    console.log(this.indexes);
   }
 
   getSide(side) {
@@ -21,16 +25,18 @@ export default class Inventory {
 
   getBySideOffset(side, offset) {
     const index = this.indexes[side];
-    const offsetIndex = Phaser.Math.Wrap(index + offset, 0, this.bag.length - 1);
-    return this.indexes[side] !== null ? this.bag[offsetIndex] : null;
+    const offsetIndex = index + offset;
+    const actualIndex = offsetIndex >= 0 && offsetIndex < this.bag.length ? offsetIndex : null;
+
+    //console.log(`index: ${index} offsetIndex: ${offsetIndex} actualIndex: ${actualIndex}`);
+    return this.indexes[side] !== null && actualIndex !== null ? this.bag[actualIndex] : null;
   }
 
   scrollIndex(side, direction) {
     const otherIndex = this.indexes[this.otherSide(side)];
-
-    // Only scroll if there's at least one thing in the bag
-    if (this.bag.length > 0) {
-      this.indexes[side] = Phaser.Math.Wrap(this.indexes[side] + direction, 0, this.bag.length - 1);
+    this.indexes[side] = Phaser.Math.Wrap(this.indexes[side] + direction, 0, this.bag.length);
+    if (this.indexes[side] == otherIndex) {
+      this.indexes[side] = Phaser.Math.Wrap(this.indexes[side] + direction, 0, this.bag.length);
     }
   }
   leftScrollLeft() {

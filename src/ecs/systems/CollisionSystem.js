@@ -22,7 +22,7 @@ export default class CollisionSystem {
     collider.setPosition(position.x, position.y);
   }
 
-  static Run(map, player, mobs) {
+  static Run(delta, scene, map, player, mobs, projectiles) {
     const { inflatedColliders } = map;
 
     // Handle the player
@@ -62,5 +62,37 @@ export default class CollisionSystem {
 
       mob.rerender();
     });
+
+    // Handle the projectiles
+    projectiles.forEach(projectile => {
+      const { position, orientation, collider } = projectile;
+      const velocity = new Phaser.Math.Vector2(0, 0).setToPolar(
+        orientation,
+        projectile.definition.speed
+      );
+      const nextPosition = new Phaser.Math.Vector2(position.x, position.y).add(velocity);
+
+      // Wall colliders
+      const wallCollision = inflatedColliders.some(collider =>
+        Phaser.Geom.Rectangle.Contains(collider, nextPosition.x, nextPosition.y)
+      );
+
+      if (wallCollision) {
+        projectile.alive = false;
+
+        // Clean up the sprite
+        scene.threeStuff.threeScene.remove(projectile.sprite);
+      }
+      else {
+        position.setFromObject(nextPosition);
+        collider.setPosition(position.x, position.y);
+
+        projectile.rerender();
+      }
+    });
+
+    // Clean up dead projectiles
+    projectiles = projectiles.filter(projectile => projectile.alive);
+
   }
 }

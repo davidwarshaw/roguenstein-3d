@@ -1,5 +1,7 @@
 import properties from '../../properties';
 
+import ProjectileFactory from './ProjectileFactory';
+
 import Inventory from './Inventory';
 
 export default class Player {
@@ -17,23 +19,31 @@ export default class Player {
 
     this.collider = new Phaser.Geom.Circle(this.position.x, this.position.y, this.radius);
 
-    // Stats
-    this.maxHealth = 100;
-    this.health = this.maxHealth;
-    this.armor = 0;
-    this.gold = 0;
-    this.inventory = new Inventory();
+    // Timers
+    this.attackCooldownTimer = null;
 
-    // Status
-    this.meleeAttacking = false;
+    // Stats
+    this.maxHealth = scene.playState.player.maxHealth;
+    this.health = scene.playState.player.health;
+    this.armor = scene.playState.player.armor;
+    this.gold = scene.playState.player.gold;
+    this.inventory = new Inventory(scene.playState.inventory);
+    this.leftPower = null;
+    this.rightPower = null;
 
     // Items
     this.item = {
       left: {
-        active: false
+        active: false,
+        coolingdown: false,
+        meleeCollider: null,
+        defending: false
       },
       right: {
-        active: false
+        active: false,
+        coolingdown: false,
+        meleeCollider: null,
+        defending: false
       }
     };
 
@@ -43,18 +53,22 @@ export default class Player {
 
     this.keys.leftScrollLeft.on('down', (key, event) => {
       this.inventory.leftScrollLeft();
+      this.hud.showItemName(scene, 'left');
       this.hud.rerender();
     });
     this.keys.leftScrollRight.on('down', (key, event) => {
       this.inventory.leftScrollRight();
+      this.hud.showItemName(scene, 'left');
       this.hud.rerender();
     });
     this.keys.rightScrollLeft.on('down', (key, event) => {
       this.inventory.rightScrollLeft();
+      this.hud.showItemName(scene, 'right');
       this.hud.rerender();
     });
     this.keys.rightScrollRight.on('down', (key, event) => {
       this.inventory.rightScrollRight();
+      this.hud.showItemName(scene, 'right');
       this.hud.rerender();
     });
   }
@@ -77,7 +91,7 @@ export default class Player {
     this.position.setFromObject(newPosition);
   }
 
-  update(delta) {
+  update(delta, scene, threeStuff) {
     this.velocity = new Phaser.Math.Vector2(0, 0);
 
     const walkMovement = this.walkSpeed * delta;
@@ -116,30 +130,94 @@ export default class Player {
     }
 
     if (this.keys.leftAction.isDown) {
-      this.inventory.getLeft();
+      this.useItem(scene, threeStuff, 'left');
+
       this.item['left'].active = true;
       this.hud.rerender();
     }
     else {
+      // We don't know if we're actually defending or not, but this should
+      // always be turned off on key up
+      this.item['left'].defending = false;
+      this.item['left'].meleeCollider = null;
+
       this.item['left'].active = false;
       this.hud.rerender();
     }
     if (this.keys.rightAction.isDown) {
-      this.inventory.getRight();
+      this.useItem(scene, threeStuff, 'right');
+
       this.item['right'].active = true;
       this.hud.rerender();
     }
     else {
+      // We don't know if we're actually defending or not, but this should
+      // always be turned off on key up
+      this.item['right'].defending = false;
+      this.item['right'].meleeCollider = null;
+
       this.item['right'].active = false;
       this.hud.rerender();
     }
   }
 
-  useItem(side) {
+  useItem(scene, threeStuff, side) {
     const item = this.inventory.getSide(side);
-    switch (item.use) {
+    switch (item.definition.use) {
       case 'melee': {
-        this.meleeAttacking = true;
+        if (!this.item[side].coolingdown) {
+          // Line is from player position to attack reach of weapon
+          this.item[side].meleeCollider = new Phaser.Geom.Line(
+            this.position.x,
+            this.position.y,
+            this.position.x,
+            this.position.y
+          );
+          Phaser.Geom.Line.Extend(this.item[side].meleeCollider, 0, item.attackReach);
+
+          // Set the cooldown
+          this.attackCooldownTimer = scene.time.delayedCall(
+            item.definition.cooldown,
+            () => {
+              this.item[side].coolingdown = false;
+            },
+            [],
+            this
+          );
+          this.item[side].coolingdown = true;
+        }
+        break;
+      }
+      case 'defense': {
+        this.item[side].defending = true;
+        break;
+      }
+      case 'projectile': {
+        if (!this.item[side].coolingdown) {
+          if (item.charges >= item.definition.chargesPerUse) {
+            item.charges -= item.definition.chargesPerUse;
+
+            const projectile = ProjectileFactory.CreateProjectile(
+              scene,
+              threeStuff,
+              item.definition.projectile,
+              this.position,
+              this.orientation
+            );
+            scene.projectiles.push(projectile);
+
+            // See the cooldown
+            this.attackCooldownTimer = scene.time.delayedCall(
+              item.definition.cooldown,
+              () => {
+                this.item[side].coolingdown = false;
+              },
+              [],
+              this
+            );
+            this.item[side].coolingdown = true;
+          }
+        }
         break;
       }
       default:

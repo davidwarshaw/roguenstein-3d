@@ -13,6 +13,7 @@ import MobFactory from '../ecs/entities/MobFactory';
 import CollisionSystem from '../ecs/systems/CollisionSystem';
 import AiSystem from '../ecs/systems/AiSystem';
 import CombatSystem from '../ecs/systems/CombatSystem';
+import ChargeSystem from '../ecs/systems/ChargeSystem';
 
 import DebugText from '../DebugText';
 
@@ -21,6 +22,10 @@ export default class GameScene extends Phaser.Scene {
     super({
       key: 'GameScene'
     });
+  }
+
+  init(playState) {
+    this.playState = playState;
   }
 
   preload() {}
@@ -38,6 +43,7 @@ export default class GameScene extends Phaser.Scene {
     this.threeStuff = new ThreeRenderer(this, this.camera.camera, this.map);
 
     this.mobs = MobFactory.CreateMobs(this, this.threeStuff, this.map);
+    this.projectiles = [];
 
     // Top UI
     this.hud = new Hud(this, this.font, this.player);
@@ -48,11 +54,16 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    this.player.update(delta);
+    this.player.update(delta, this, this.threeStuff);
 
-    AiSystem.Run(delta, this, this.player, this.mobs);
-    CollisionSystem.Run(this.map, this.player, this.mobs);
-    CombatSystem.Run(delta, this, this.player, this.mobs);
+    AiSystem.Run(delta, this, this.map, this.player, this.mobs, this.projectiles);
+    CollisionSystem.Run(delta, this, this.map, this.player, this.mobs, this.projectiles);
+    CombatSystem.Run(delta, this, this.map, this.player, this.mobs, this.projectiles);
+    ChargeSystem.Run(delta, this, this.map, this.player, this.mobs, this.projectiles);
+
+    // Clean up dead mobs and projectiles
+    this.mobs = this.mobs.filter(mob => mob.alive);
+    this.projectiles = this.projectiles.filter(projectile => projectile.alive);
 
     this.camera.update(this.player);
 

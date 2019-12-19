@@ -1,20 +1,67 @@
 {
-  "sword": {
-    "name": "sword",
-    "glyph": "(",
-    "use": "melee",
-    "useTween": [0, 0, 10, 10]
-  },
-  "shield": {
-    "name": "shield",
-    "glyph": "]",
-    "use": "defense",
-    "useTween": [0, 0, 10, 10]
-  },
-  "wand": {
-    "name": "wand",
+  "wooden club": {
+    "name": "wooden staff",
     "glyph": "!",
+    "color": "0x663300",
+    "use": "melee",
+    "cooldown": 500,
+    "damage": 5,
+    "attackReach": 1
+  },
+  "wooden shield": {
+    "name": "wooden shield",
+    "glyph": "]",
+    "color": "0x663300",
+    "use": "defense",
+    "damageReductionPercent": 5
+  },
+  "iron sword": {
+    "name": "iron sword",
+    "glyph": "(",
+    "color": "0x333333",
+    "use": "melee",
+    "cooldown": 500,
+    "damage": 7,
+    "attackReach": 1
+  },
+  "iron shield": {
+    "name": "iron shield",
+    "glyph": "o",
+    "color": "0x333333",
+    "use": "defense",
+    "damageReductionPercent": 7
+  },
+  "steel sword": {
+    "name": "steel sword",
+    "glyph": "(",
+    "color": "0x999999",
+    "use": "melee",
+    "cooldown": 500,
+    "damage": 10,
+    "attackReach": 1
+  },
+  "steel shield": {
+    "name": "steel shield",
+    "glyph": "O",
+    "color": "0x999999",
+    "use": "defense",
+    "damageReductionPercent": 10
+  },
+  "magic wand": {
+    "name": "magic wand",
+    "glyph": "|",
+    "color": "0xffff33",
     "use": "projectile",
-    "useTween": [0, 0, 10, 10]
+    "cooldown": 500,
+    "chargesPerUse": 5,
+    "chargeRefill": 0.001,
+    "projectile": {
+      "glyph": "period",
+      "color": "0xffff66",
+      "scale": 1,
+      "speed": 2,
+      "radius": 1,
+      "damage": 2
+    }
   }
 }
