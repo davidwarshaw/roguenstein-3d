@@ -145,9 +145,13 @@ export default class Hud {
 
       const frame = this.font.getFrameForCharacter(glyph);
 
-      // console.log(glyph);
-      // console.log(frame);
-      this.itemViews[side].setTexture('asciiSpriteSheet', frame);
+      try {
+        this.itemViews[side].setTexture('asciiSpriteSheet', frame);
+      }
+      catch (err) {
+        console.error(`Error with: glyph: ${glyph} frame: ${frame}`);
+        console.error(err);
+      }
       this.itemViews[side].tint = color;
 
       if (this.player.item[side].active) {
