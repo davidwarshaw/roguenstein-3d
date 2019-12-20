@@ -16,7 +16,7 @@ export default class ModelFactory {
       'wall_green_2',
       'torch'
     ].forEach(wallType => {
-      this.textures[wallType] = new THREE.TextureLoader().load(`../assets/images/${wallType}.png`);
+      this.textures[wallType] = new THREE.TextureLoader().load(`assets/images/${wallType}.png`);
       this.textures[wallType].minFilter = THREE.NearestFilter;
       this.textures[wallType].magFilter = THREE.NearestFilter;
 
@@ -32,18 +32,18 @@ export default class ModelFactory {
     });
 
     this.textures['sealedPortal'] = new THREE.TextureLoader().load(
-      '../assets/images/sealed_portal.png'
+      'assets/images/sealed_portal.png'
     );
     this.textures['sealedPortal'].minFilter = THREE.NearestFilter;
     this.textures['sealedPortal'].magFilter = THREE.NearestFilter;
 
     this.textures['openPortal'] = new THREE.TextureLoader().load(
-      '../assets/images/open_portal.png'
+      'assets/images/open_portal.png'
     );
     this.textures['openPortal'].minFilter = THREE.NearestFilter;
     this.textures['openPortal'].magFilter = THREE.NearestFilter;
 
-    this.textures['floor'] = new THREE.TextureLoader().load('../assets/images/floor_grey.png');
+    this.textures['floor'] = new THREE.TextureLoader().load('assets/images/floor_grey.png');
     this.textures['floor'].minFilter = THREE.NearestFilter;
     this.textures['floor'].magFilter = THREE.NearestFilter;
     this.textures['floor'].wrapS = THREE.RepeatWrapping;

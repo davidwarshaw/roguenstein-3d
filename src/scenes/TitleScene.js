@@ -13,11 +13,13 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     this.font = new Font(this);
-    this.font.render(50, 80, '+-===<[ DRAGON SMASH ]>===-+');
-    this.font.render(50, 92, '|                          |');
-    this.font.render(50, 108, '| Smash dragons, get gold! |');
-    this.font.render(50, 122, '|                          |');
-    this.font.render(50, 136, '+--------------------------+');
+    this.font.render(50, 70, '+--===<[ DRAGON SMASH ]>===--+');
+    this.font.render(50, 82, '|                            |');
+    this.font.render(50, 98, '|  Smash dragons, get gold!  |');
+    this.font.render(50, 112, '|                            |');
+    this.font.render(50, 126, '+----------------------------+');
+    this.font.render(76, 184, '(all assets by _never_k)');
+
 
     this.playState = {
       player: {
@@ -35,18 +37,7 @@ export default class TitleScene extends Phaser.Scene {
       }
     };
 
-    this.input.keyboard.addCapture(properties.playerKeys);
-    this.keys = this.input.keyboard.addKeys(properties.playerKeys);
+    this.input.keyboard.on('keydown', () => this.scene.start('GameScene', this.playState));
   }
 
-  update(time, delta) {
-    if (
-      this.keys.up.isDown ||
-      this.keys.down.isDown ||
-      this.keys.left.isDown ||
-      this.keys.right.isDown
-    ) {
-      this.scene.start('GameScene', this.playState);
-    }
-  }
 }

@@ -41,7 +41,7 @@ class Mob {
     );
 
     // Model
-    const texturePath = `../assets/images/mob_${this.definition.glyph}.png`;
+    const texturePath = `assets/images/mob_${this.definition.glyph}.png`;
     const map = new THREE.TextureLoader().load(texturePath);
     map.minFilter = THREE.NearestFilter;
     map.magFilter = THREE.NearestFilter;

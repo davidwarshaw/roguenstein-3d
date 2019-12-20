@@ -33,7 +33,7 @@ export default class Player {
     this.inventory = new Inventory(scene.playState.inventory);
     this.leftPower = null;
     this.rightPower = null;
-    this.dragonsSmashed = 4;
+    this.dragonsSmashed = 0;
 
     // Items
     this.item = {
