@@ -107,7 +107,7 @@ export default class Hud {
 
     // Messages
     this.messageTimer = null;
-    this.message = font.render(2 * margin, 2 * margin, 'Message');
+    this.message = font.render(2 * margin, 2 * margin, '');
   }
 
   showItemName(scene, side) {
