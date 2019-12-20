@@ -1,7 +1,7 @@
 {
-  "name": "suspiria-for-atari",
-  "description": "A lost cartridge",
-  "homepage": "https://github.com/davidwarshaw/suspiria-for-atari",
+  "name": "roguenstein-3d",
+  "description": "A mashup",
+  "homepage": "https://github.com/davidwarshaw/roguenstein-3d",
   "version": "0.0.1",
   "author": {
     "name": "David Warshaw",
@@ -10,17 +10,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davidwarshaw/suspiria-for-atari.git"
+    "url": "git+https://github.com/davidwarshaw/roguenstein-3d.git"
   },
   "license": "MIT",
   "keywords": [
     "phaser",
     "game",
     "itch.io",
-    "astrojane"
+    "8-bits-to-infinity"
   ],
   "bugs": {
-    "url": "https://github.com/davidwarshaw/suspiria-for-atari/issues"
+    "url": "https://github.com/davidwarshaw/roguenstein-3d/issues"
   },
   "main": "index.js",
   "scripts": {
