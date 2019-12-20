@@ -9,8 +9,6 @@ export default class Inventory {
       left: playStateInventory.indexes.left,
       right: playStateInventory.indexes.right
     };
-    console.log(this.bag);
-    console.log(this.indexes);
   }
 
   getSide(side) {
@@ -27,8 +25,7 @@ export default class Inventory {
     const index = this.indexes[side];
     const offsetIndex = index + offset;
     const actualIndex = offsetIndex >= 0 && offsetIndex < this.bag.length ? offsetIndex : null;
-
-    //console.log(`index: ${index} offsetIndex: ${offsetIndex} actualIndex: ${actualIndex}`);
+    
     return this.indexes[side] !== null && actualIndex !== null ? this.bag[actualIndex] : null;
   }
 

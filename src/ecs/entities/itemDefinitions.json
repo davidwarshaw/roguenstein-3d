@@ -1,6 +1,14 @@
 {
-  "wooden club": {
-    "name": "wooden staff",
+  "Health Potion": {
+    "name": "Health Potion",
+    "glyph": "?",
+    "color": "0xf61212",
+    "use": "health",
+    "cooldown": 500,
+    "health": 5
+  },
+  "Wooden Club": {
+    "name": "Wooden Club",
     "glyph": "!",
     "color": "0x663300",
     "use": "melee",
@@ -8,15 +16,15 @@
     "damage": 5,
     "attackReach": 1
   },
-  "wooden shield": {
-    "name": "wooden shield",
+  "Wooden Shield": {
+    "name": "Wooden Shield",
     "glyph": "]",
     "color": "0x663300",
     "use": "defense",
     "damageReductionPercent": 5
   },
-  "iron sword": {
-    "name": "iron sword",
+  "Iron Sword": {
+    "name": "Iron Sword",
     "glyph": "(",
     "color": "0x333333",
     "use": "melee",
@@ -24,15 +32,15 @@
     "damage": 7,
     "attackReach": 1
   },
-  "iron shield": {
-    "name": "iron shield",
+  "Iron Shield": {
+    "name": "Iron Shield",
     "glyph": "o",
     "color": "0x333333",
     "use": "defense",
     "damageReductionPercent": 7
   },
-  "steel sword": {
-    "name": "steel sword",
+  "Steel Sword": {
+    "name": "Steel Sword",
     "glyph": "(",
     "color": "0x999999",
     "use": "melee",
@@ -40,15 +48,32 @@
     "damage": 10,
     "attackReach": 1
   },
-  "steel shield": {
-    "name": "steel shield",
+  "Steel Shield": {
+    "name": "Steel Shield",
     "glyph": "O",
     "color": "0x999999",
     "use": "defense",
     "damageReductionPercent": 10
   },
-  "magic wand": {
-    "name": "magic wand",
+  "Wooden Bow": {
+    "name": "Wooden Bow",
+    "glyph": "{",
+    "color": "0xb0800d",
+    "use": "projectile",
+    "cooldown": 500,
+    "chargesPerUse": 15,
+    "chargeRefill": 0.0005,
+    "projectile": {
+      "glyph": "carat",
+      "color": "0xdbdad9",
+      "scale": 1,
+      "speed": 4,
+      "radius": 1,
+      "damage": 20
+    }
+  },
+  "Magic Wand": {
+    "name": "Magic Wand",
     "glyph": "|",
     "color": "0xffff33",
     "use": "projectile",
@@ -61,7 +86,41 @@
       "scale": 1,
       "speed": 2,
       "radius": 1,
+      "damage": 4
+    }
+  },
+  "Spark Wand": {
+    "name": "Spark Wand",
+    "glyph": "|",
+    "color": "0x9419ea",
+    "use": "projectile",
+    "cooldown": 100,
+    "chargesPerUse": 1,
+    "chargeRefill": 0.002,
+    "projectile": {
+      "glyph": "plus",
+      "color": "0x58fbff",
+      "scale": 1,
+      "speed": 3,
+      "radius": 1,
       "damage": 2
+    }
+  },
+  "Plasma Wand": {
+    "name": "Plasma Wand",
+    "glyph": "|",
+    "color": "0x66874c",
+    "use": "projectile",
+    "cooldown": 300,
+    "chargesPerUse": 10,
+    "chargeRefill": 0.001,
+    "projectile": {
+      "glyph": "star",
+      "color": "0xffff66",
+      "scale": 1,
+      "speed": 2,
+      "radius": 2,
+      "damage": 10
     }
   }
 }

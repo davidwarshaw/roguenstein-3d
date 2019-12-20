@@ -14,11 +14,23 @@ export default class CombatSystem {
     player.setValue('health', health);
   }
 
-  static DamageMob(scene, mob, damage) {
+  static DamageMob(scene, mob, player, damage) {
     mob.health = mob.health - damage;
     if (mob.health <= 0) {
+      player.setValue('gold', player.gold + mob.definition.damage);
       mob.alive = false;
       scene.threeStuff.threeScene.remove(mob.sprite);
+
+      if (mob.definition.name.endsWith('Dragon')) {
+        const dragonsSmashed = player.dragonsSmashed + 1;
+        const dragonsToGo = 4 - dragonsSmashed;
+        player.setValue('dragonsSmashed', dragonsSmashed);
+        scene.hud.showMessage(`${dragonsSmashed} dragons smashed, ${dragonsToGo} to go!`);
+      }
+    }
+    if (player.dragonsSmashed === 4) {
+      console.log(scene);
+      scene.scene.start('WinScene', player);
     }
     mob.enterHit();
   }
@@ -31,7 +43,7 @@ export default class CombatSystem {
         const damage = player.inventory.getSide(side).definition.damage;
         mobs
           .filter(mob => Phaser.Geom.Intersects.LineToCircle(meleeCollider, mob.collider))
-          .forEach(mob => CombatSystem.DamageMob(scene, mob, damage));
+          .forEach(mob => CombatSystem.DamageMob(scene, mob, player, damage));
       }
     });
 
@@ -60,7 +72,7 @@ export default class CombatSystem {
       const mobCollision = mobs
         .filter(mob => Phaser.Geom.Circle.Contains(mob.collider, nextPosition.x, nextPosition.y))
         .some(mob => {
-          CombatSystem.DamageMob(scene, mob, projectile.definition.damage);
+          CombatSystem.DamageMob(scene, mob, player, projectile.definition.damage);
           return true;
         });
 

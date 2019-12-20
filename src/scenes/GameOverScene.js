@@ -11,7 +11,8 @@ export default class GameOverScene extends Phaser.Scene {
 
   create() {
     this.font = new Font(this);
-    this.font.render(100, 100, 'Game Over');
+    this.font.render(42, 100, 'You were the one who was smashed!');
+    this.font.render(158, 120, ':(');
 
     this.input.keyboard.addCapture(properties.playerKeys);
     this.keys = this.input.keyboard.addKeys(properties.playerKeys);

@@ -33,6 +33,7 @@ export default class Player {
     this.inventory = new Inventory(scene.playState.inventory);
     this.leftPower = null;
     this.rightPower = null;
+    this.dragonsSmashed = 4;
 
     // Items
     this.item = {
@@ -177,6 +178,28 @@ export default class Player {
             this.position.y
           );
           Phaser.Geom.Line.Extend(this.item[side].meleeCollider, 0, item.attackReach);
+
+          // Set the cooldown
+          this.attackCooldownTimer = scene.time.delayedCall(
+            item.definition.cooldown,
+            () => {
+              this.item[side].coolingdown = false;
+            },
+            [],
+            this
+          );
+          this.item[side].coolingdown = true;
+        }
+        break;
+      }
+      case 'health': {
+        if (!this.item[side].coolingdown) {
+          const newHealth = Phaser.Math.Clamp(
+            this.health + item.definition.health,
+            0,
+            this.maxHealth
+          );
+          this.setValue('health', newHealth);
 
           // Set the cooldown
           this.attackCooldownTimer = scene.time.delayedCall(

@@ -13,7 +13,11 @@ export default class TitleScene extends Phaser.Scene {
 
   create() {
     this.font = new Font(this);
-    this.font.render(100, 100, 'Roguenstein 3D');
+    this.font.render(50, 80, '+-===<[ DRAGON SMASH ]>===-+');
+    this.font.render(50, 92, '|                          |');
+    this.font.render(50, 108, '| Smash dragons, get gold! |');
+    this.font.render(50, 122, '|                          |');
+    this.font.render(50, 136, '+--------------------------+');
 
     this.playState = {
       player: {
@@ -25,7 +29,7 @@ export default class TitleScene extends Phaser.Scene {
       inventory: {
         bag: ItemFactory.GetStartingItemDefinitions(),
         indexes: {
-          left: 0,
+          left: 2,
           right: 1
         }
       }

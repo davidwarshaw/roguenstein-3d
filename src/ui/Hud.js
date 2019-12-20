@@ -49,8 +49,8 @@ export default class Hud {
         { character: '!', field: 'rightPower', color: 0x0000ff }
       ],
       [
-        { character: '/', field: 'armor', color: 0x888888 },
-        { character: '%', field: 'food', color: 0xff00ff },
+        {},
+        {},
         {},
         {},
         {}
@@ -104,6 +104,10 @@ export default class Hud {
       );
       return { side, text };
     });
+
+    // Messages
+    this.messageTimer = null;
+    this.message = font.render(2 * margin, 2 * margin, 'Message');
   }
 
   showItemName(scene, side) {
@@ -117,9 +121,19 @@ export default class Hud {
     );
   }
 
+  showMessage(scene, message) {
+    this.message.setText(message);
+    this.messageTimer = scene.time.delayedCall(
+      properties.itemNameTime,
+      () => this.message.setText(''),
+      [],
+      this
+    );
+  }
+
   formatValue(numeric) {
     const value = numeric > 0 ? Math.round(numeric) : '-';
-    return value.toString().padStart(4, '-');
+    return value.toString().padStart(3, ' ');
   }
 
   rerender() {
@@ -130,6 +144,9 @@ export default class Hud {
       const color = item ? item.definition.color : 0x000000;
 
       const frame = this.font.getFrameForCharacter(glyph);
+
+      // console.log(glyph);
+      // console.log(frame);
       this.itemViews[side].setTexture('asciiSpriteSheet', frame);
       this.itemViews[side].tint = color;
 
@@ -169,10 +186,5 @@ export default class Hud {
         text.tint = color;
       })
     );
-
-    // Item names
-    // this.itemNames.forEach(itemName =>
-    //   itemName.text.setText(this.player.inventory.getSide(itemName.side).definition.name)
-    // );
   }
 }

@@ -1,6 +1,14 @@
 {
   "hub": {
-    "rat": 3,
-    "bat": 6
+    "Rat": 30,
+    "Snake": 30,
+    "Bat": 50,
+    "Skeleton": 10,
+    "Goblin": 20,
+    "Orc": 10,
+    "Green Dragon": 1,
+    "Yellow Dragon": 1,
+    "Blue Dragon": 1,
+    "Red Dragon": 1
   }
 }

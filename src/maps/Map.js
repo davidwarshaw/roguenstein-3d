@@ -12,7 +12,6 @@ export default class Map {
     this.world = [...Array(39).keys()].map((tileRow, i) =>
       [...Array(39).keys()].map((tile, j) => '.')
     );
-    console.log(this.world);
 
     // The central room
     prefabs[worldName].forEach((tileRow, j) =>

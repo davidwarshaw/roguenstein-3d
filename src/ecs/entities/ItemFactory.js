@@ -20,7 +20,7 @@ export default class ItemFactory {
     return items;
   }
   static GetStartingItemDefinitions() {
-    const definitions = ['magic wand', 'wooden club'].map(name => itemDefinitions[name]);
+    const definitions = Object.keys(itemDefinitions).map(name => itemDefinitions[name]);
     return definitions;
   }
 }
