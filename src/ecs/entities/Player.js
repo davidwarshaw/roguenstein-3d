@@ -14,7 +14,10 @@ export default class Player {
     this.strafeSpeed = 0.02;
     this.turnSpeed = 0.003;
 
-    this.position = new Phaser.Math.Vector2(15, 15);
+    this.position = new Phaser.Math.Vector2(
+      19 * properties.tile.widthX,
+      19 * properties.tile.widthZ
+    );
     this.orientation = 0;
 
     this.collider = new Phaser.Geom.Circle(this.position.x, this.position.y, this.radius);

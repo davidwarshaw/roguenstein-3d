@@ -21,8 +21,14 @@ export default class ThreeRenderer {
     map.getTiles().forEach((tileRow, j) =>
       tileRow.forEach((tile, i) => {
         switch (tile) {
-          case '#': {
-            const mesh = this.modelFactory.createWall(i, j);
+          case '#':
+          case 'R':
+          case 'B':
+          case 'Y':
+          case 'T':
+          case '"':
+          case 't': {
+            const mesh = this.modelFactory.createWall(i, j, tile);
             this.threeScene.add(mesh);
             break;
           }

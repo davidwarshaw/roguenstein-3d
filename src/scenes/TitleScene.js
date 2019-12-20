@@ -26,7 +26,7 @@ export default class TitleScene extends Phaser.Scene {
         bag: ItemFactory.GetStartingItemDefinitions(),
         indexes: {
           left: 0,
-          right: 0
+          right: 1
         }
       }
     };

@@ -5,10 +5,31 @@ import properties from '../properties';
 export default class ModelFactory {
   constructor() {
     this.textures = {};
+    this.meshResources = {};
 
-    this.textures['wall'] = new THREE.TextureLoader().load('../assets/images/wall_grey.png');
-    this.textures['wall'].minFilter = THREE.NearestFilter;
-    this.textures['wall'].magFilter = THREE.NearestFilter;
+    [
+      'wall_grey',
+      'wall_red',
+      'wall_blue',
+      'wall_yellow',
+      'wall_green_1',
+      'wall_green_2',
+      'torch'
+    ].forEach(wallType => {
+      this.textures[wallType] = new THREE.TextureLoader().load(`../assets/images/${wallType}.png`);
+      this.textures[wallType].minFilter = THREE.NearestFilter;
+      this.textures[wallType].magFilter = THREE.NearestFilter;
+
+      this.meshResources[wallType] = {};
+      this.meshResources[wallType]['geometry'] = new THREE.BoxBufferGeometry(
+        properties.tile.widthX,
+        properties.tile.heightY,
+        properties.tile.widthZ
+      );
+      this.meshResources[wallType]['material'] = new THREE.MeshBasicMaterial({
+        map: this.textures[wallType]
+      });
+    });
 
     this.textures['sealedPortal'] = new THREE.TextureLoader().load(
       '../assets/images/sealed_portal.png'
@@ -29,17 +50,6 @@ export default class ModelFactory {
     this.textures['floor'].wrapT = THREE.RepeatWrapping;
     this.textures['floor'].offset.set(1, 1);
 
-    this.meshResources = {};
-
-    this.meshResources['wall'] = {};
-    this.meshResources['wall']['geometry'] = new THREE.BoxBufferGeometry(
-      properties.tile.widthX,
-      properties.tile.heightY,
-      properties.tile.widthZ
-    );
-    this.meshResources['wall']['material'] = new THREE.MeshBasicMaterial({
-      map: this.textures['wall']
-    });
     this.meshResources['portal'] = {};
     this.meshResources['portal']['geometry'] = new THREE.BoxBufferGeometry(
       properties.tile.widthX,
@@ -74,9 +84,18 @@ export default class ModelFactory {
     return mesh;
   }
 
-  createWall(tileX, tileY) {
+  createWall(tileX, tileY, tile) {
     const tileZ = -tileY;
-    const { geometry, material } = this.meshResources['wall'];
+    const tileLookup = {
+      '#': 'wall_grey',
+      R: 'wall_red',
+      B: 'wall_blue',
+      Y: 'wall_yellow',
+      T: 'wall_green_1',
+      '"': 'wall_green_2',
+      t: 'torch'
+    };
+    const { geometry, material } = this.meshResources[tileLookup[tile]];
     const mesh = new THREE.Mesh(geometry, material);
 
     mesh.position.x = tileX * properties.tile.widthX + properties.tile.widthX / 2;
@@ -100,7 +119,7 @@ export default class ModelFactory {
 
   createDoor(tileX, tileY, northSouth) {
     const tileZ = -tileY;
-    const { geometry, material } = this.meshResources['wall'];
+    const { geometry, material } = this.meshResources['wall_grey'];
     const mesh = new THREE.Mesh(geometry, material);
 
     mesh.position.x = tileX * properties.tile.widthX + properties.tile.widthX / 2;

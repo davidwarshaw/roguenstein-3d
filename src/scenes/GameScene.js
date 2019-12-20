@@ -36,7 +36,8 @@ export default class GameScene extends Phaser.Scene {
     this.font = new Font(this);
 
     this.player = new Player(this);
-    this.player.setPosition({ x: 50, y: 50 });
+
+    //this.player.setPosition({ x: 50, y: 50 });
 
     this.map = new Map(this.player, worldName);
     this.camera = new Camera(this.player);
